@@ -1,0 +1,15 @@
+# Build outputs
+build/
+out/
+module_out/
+zip_test/
+*.zip
+
+# Reverse-engineering dumps (proprietary Pico binaries - NEVER commit)
+pxrlibs/
+*.syms.txt
+*.apk
+*.so
+
+# Logs
+*.log

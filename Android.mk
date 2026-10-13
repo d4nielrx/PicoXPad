@@ -1,0 +1,14 @@
+LOCAL_PATH := $(call my-dir)
+
+include $(CLEAR_VARS)
+
+LOCAL_MODULE := picoxpad_daemon
+LOCAL_SRC_FILES := picoxpad_daemon.cpp
+LOCAL_CFLAGS := -Wall -Wextra -O2 -D_GNU_SOURCE
+LOCAL_CPPFLAGS := -std=c++17
+LOCAL_LDLIBS := -llog -lpthread
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_CLASS := EXECUTABLES
+LOCAL_MODULE_PATH := $(TARGET_OUT_OPTIONAL_EXECUTABLES)
+
+include $(BUILD_EXECUTABLE)

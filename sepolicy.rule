@@ -1,0 +1,53 @@
+# PicoXPad SELinux Policy Rules
+# Allows the daemon to access uinput, input devices, and binder services
+
+# Allow our daemon to create uinput devices
+allow magisk_file uinput_device:chr_file { read write open create getattr };
+allow magisk_file input_device:chr_file { read write open getattr };
+
+# Allow binder communication with Pico controller service
+allow magisk_file pvrcontrollerservice_service:service_manager find;
+allow magisk_file pvrcontrollerservice_service:binder { call transfer };
+
+# Allow reading controller config files
+allow magisk_file pxr_sensor_config_file:file { read open getattr };
+
+# Allow access to virtual input
+allow magisk_file virtual_input_device:chr_file { read write open getattr };
+
+# Allow our process to run as daemon
+type picoxpad_daemon, domain;
+type picoxpad_daemon_exec, exec_type, vendor_file_type, file_type;
+
+# Init rule to start our service
+init_daemon_domain(picoxpad_daemon)
+
+# Allow our daemon to use uinput
+allow picoxpad_daemon uinput_device:chr_file { read write open create ioctl getattr };
+allow picoxpad_daemon input_device:chr_file { read write open ioctl getattr };
+
+# Allow binder access for controller service
+allow picoxpad_daemon pvrcontrollerservice_service:service_manager find;
+allow picoxpad_daemon pvrcontrollerservice_service:binder { call transfer };
+
+# Allow reading input events
+allow picoxpad_daemon virtual_input_device:chr_file { read write open ioctl getattr };
+
+# Allow loading kernel modules
+allow picoxpad_daemon kernel:system module_load;
+allow picoxpad_daemon module:module { request load };
+
+# Allow logging
+allow picoxpad_daemon logd:unix_dgram_socket { write connectto };
+allow picoxpad_daemon logd:fd use;
+
+# Allow reading system properties
+allow picoxpad_daemon default_prop:property_service get;
+allow picoxpad_daemon persist_prop:property_service get;
+
+# Network access (if needed for streaming)
+allow picoxpad_daemon netd:unix_stream_socket connectto;
+
+# File access
+allow picoxpad_daemon system_file:file { read write open getattr };
+allow picoxpad_daemon vendor_file:file { read write open getattr };
